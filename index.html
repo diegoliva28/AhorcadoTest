@@ -10,26 +10,44 @@
 </head>
 
 <body>
+    <h2 class="tiempo">Tiempo restante:</h2>
     
     <main class="container">
-        
         <div class="col texto ">
             <h1>Ahorcado</h1>
-
             <p class="hiddenWord"></p>
            
             <div class="letra">
-                <p>Introduzca una letra:</p>
-                
-                <input type="text">
-                <button>Verificar letra</button>
+                <h2>Introduzca una letra:</h2>
+                <input type="text" autofocus>
+                <button onclick="evaluateWord()">Verificar letra</button>
+                <!-- AutoFocus me hace foco en la etiqueta -->
+                <!-- <button >Verificar letra</button> BUTON QUE FUNCIONA CON ESCUCHADOR-->
+            </div>
+
+            <div class="ayudas">
+                <p class="soloUnaLetra">Por favor ingrese una letra</p>
+
+                <div class="contador">
+                    <!-- <p class="contadorTitulo">Letras usadas</p> -->
+                    <h4>Letras usadas:</h4>
+                    <p class="letrasIngresadas">-</p>
+                    <h4>Cantidades intentos:</h4>
+                    <p class="intentosRestantes">-</p>
+                </div>
             </div>
         </div>
         
         <div class="col imagen">
-            
             <img id="imagen" src="img/img0.png" alt="Ahorcado">
         </div>
+
+        <div>
+            <div>
+
+            </div>
+        </div>
+        <!-- tanto reglas como pista poner un pop up abajp del juego -->
     </main>
     
     <!-- Linkeo del JavaScript -->
