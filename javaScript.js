@@ -1,19 +1,24 @@
-const words=['facu','rocio','amilcar','diego','sebastian'];
-let numero=Math.floor(Math.random()*words.length);
-const palabraElegida=words[numero];
+//Palabra
+// const words=['facu','rocio','amilcar','diego','sebastian'];
+// let numero=Math.floor(Math.random()*words.length);
+// const palabraElegida=words[numero];
+// let palabraOculta=generarPalabraOculta(palabraElegida);
 
+const palabraElegida="diego";
+let palabraOculta=generarPalabraOculta("diego");
+let hiddenWord=palabraOculta.join(" ");
+//Variables
 let indiceImagen=0;
 let intentos=7;
 //Cronometro
-let temporizador=false;
-let timer=3; // cantidad de segundos
+let primeraVez=false;
+let timer=60; // cantidad de segundos
 let controladorTimer=null;
 
-console.log(palabraElegida)
+console.log(palabraElegida);
 
-let palabraOculta=generarPalabraOculta(palabraElegida);
-let hiddenWord=palabraOculta.join(" ");
-
+const container=document.querySelector(".container");
+console.log(container);
 
 //Etiquetas
 let etiquetaTexto=document.querySelector('.hiddenWord');
@@ -23,40 +28,44 @@ let etiquetaLetra=document.querySelector('input');
 let etiquetaLetraIngresadas=document.querySelector('.letrasIngresadas');
 let etiquetaIntentos=document.querySelector('.intentosRestantes');
 let etiquetaTimer=document.querySelector('.tiempo');
- let mensaje=document.querySelector('.texto');
-// document.querySelector('.hiddenWord').innerHTML=hiddenWord;
+let mensaje=document.querySelector('.texto');
+let etiquetaPista=document.querySelector('.pista');
+
 
 etiquetaTexto.innerHTML=hiddenWord;
 
-// Funcion con escuchador
-// document.querySelector('button').addEventListener('click',evaluateWord);
 function evaluateWord(){
 
-    if (!temporizador) {
+    if (!primeraVez) {
         contarTiempo();
-        temporizador=true;
+        primeraVez=true;
+        etiquetaPista.style.visibility="visible";
+        //Probar hacer un metodo que sea iniciar partido y que se ejecute aca ciertas cosas
     }
 
-    let valorLetra=etiquetaLetra.value;
-    // if (etiquetaLetra.value.length==1) {
-    if (valorLetra.length==1) {
-        etiquetaAviso.classList.remove("ocultar")
+        let valorLetra=etiquetaLetra.value;
+        if (valorLetra.length==1) {
+            etiquetaAviso.classList.remove("ocultar")
+            
+            let acierto=acertarLetra(valorLetra.toLowerCase());
+            pierdeVida(acierto);
+
+            hiddenWord=palabraOculta.join(" ");
+            etiquetaTexto.innerHTML=hiddenWord;
+            etiquetaLetraIngresadas.innerHTML+=valorLetra+" ";
+        }
+        else{
+            etiquetaAviso.classList.add("ocultar");
+        }
         
-        let acierto=acertarLetra(valorLetra.toLowerCase());
-        hiddenWord=palabraOculta.join(" ");
-        etiquetaTexto.innerHTML=hiddenWord;
-        pierdeVida(acierto);
-        finalizaLaPartida();
-        //Podria hacer un array y que se muestren solo X numero pero por ahora lo dejo asi
-        etiquetaLetraIngresadas.innerHTML+=valorLetra+" ";
-    }
-    else{
-        etiquetaAviso.classList.add("ocultar");
-    }
-    
-    etiquetaIntentos.innerHTML=intentos
-    etiquetaLetra.value="";
-    etiquetaLetra.focus();
+        if(finalizaLaPartida()){
+             clearInterval(controladorTimer);
+        }
+        
+        mostrarImagen();
+        etiquetaIntentos.innerHTML=intentos
+        etiquetaLetra.value="";
+        etiquetaLetra.focus();
 }
 
 function acertarLetra(letraSeleccionada){
@@ -83,22 +92,36 @@ return palabraOculta;
 function pierdeVida(valorIntento) {
     if (!valorIntento) {
         intentos--;
-        indiceImagen++;
-        let source= "img/img"+indiceImagen+".png"
+        indiceImagen++;      
+    }
+}
+
+function mostrarImagen() {
+      let source= "img/img"+indiceImagen+".png"
         //Seteo la direccion de la imagen
-        etiquetaImagen.setAttribute("src",source);        
+        etiquetaImagen.setAttribute("src",source); 
+
+
+        //Joda
+         if (!hiddenWord.includes("_")) {
+        source= "img/momo2.jpg"
+        //Seteo la direccion de la imagen
+        etiquetaImagen.setAttribute("src",source);
     }
 }
 
 function finalizaLaPartida() {    
-   
-
+    let finalizo=false;
     if (!hiddenWord.includes("_")) {
-        mensaje.innerHTML='<h1 >Ganaste</h1>'
+        mensaje.classList.toggle("textoReinicio");
+        mensaje.innerHTML='<h1 >Ganaste</h1> <button class="reiniciar" onclick="recargarPagina()">Reiniciar</button>';
+        finalizo=true;
     }else if(intentos==0){
-        mensaje.innerHTML='<h1 >Perdiste</h1>'
-        // mensaje.innerHTML='<h1 class="color">Perdiste</h1>'
+        mensaje.classList.toggle("textoReinicio");
+        mensaje.innerHTML='<h1 >Perdiste</h1> <button class="reiniciar" onclick="recargarPagina()">Reiniciar</button>';
+        finalizo=true;
     }
+    return finalizo;
 }
 
 function contarTiempo() {
@@ -106,13 +129,18 @@ function contarTiempo() {
         timer--;
         // Etiqueta de tiempo
         etiquetaTimer.innerHTML="Tiempo restante: "+timer;
-                // <h2 >c:</h2>
+        // <h2 >c:</h2>
         if(timer==0){
             clearInterval(controladorTimer);
-            mensaje.innerHTML='<h1 >Perdiste</h1>';
-            let source= "img/img7.png";
-            etiquetaImagen.setAttribute("src",source); 
+            indiceImagen=7;
+            mensaje.classList.toggle("textoReinicio");
+            mensaje.innerHTML='<h1 >Perdiste</h1> <button class="reiniciar" onclick="recargarPagina()">Reiniciar</button>';
+            mostrarImagen();
         }
     },1000);    
+}
+
+function recargarPagina() {
+ location.reload();
 }
 

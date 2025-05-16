@@ -23,14 +23,18 @@
     text-align: center;
     width: 400px;
     font-family: 'Arial Narrow Bold', sans-serif;
-    
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
+}
+
+.textoReinicio{
+    justify-content: center;
+    gap: 25px;
 }
 
 .texto h1, .hiddenWord{
-    font-size: 3.5em;
+    font-size: 3em;
 }
 
 /* Bloque letra */
@@ -46,7 +50,7 @@
     border-radius: 10px;
 }
 
-.letra button{
+.letra button,.reiniciar{
     background-color: rgb(2, 255, 99);
     font-size: 1.5em;
     padding: 5px;
@@ -63,8 +67,27 @@
     font-family: inherit;
 }
 
+/* Bloque pista */
+.pista{
+    background-color: rgba(214, 214, 209, 0.623);
+    margin-top: 20px;
+    padding: 10px;
+    width: 50rem;
+    border-radius: 10px;
+    border-style: solid;
+    justify-self: center;
+    visibility: hidden;
+}
+
+
 /* Otras cosas */
 .ocultar{
     visibility: visible;
 }
 
+.reiniciar{
+    background-color: white;
+    width: 200px;
+    align-self: center;
+
+}
